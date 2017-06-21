@@ -1,0 +1,9 @@
+{
+  "name": "start-nodejs",
+  "version": "1.0.0",
+  "description": "Node.js",
+  "main": "index.js",
+  "repository": "git@github.com:cham11ng/start-nodejs.git",
+  "author": "Sagar Chamling <sgr.raee@gmail.com>",
+  "license": "MIT"
+}

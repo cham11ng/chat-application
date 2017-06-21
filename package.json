@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "git@github.com:cham11ng/start-nodejs.git",
   "author": "Sagar Chamling <sgr.raee@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "express": "^4.15.3"
+  }
 }

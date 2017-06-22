@@ -15,5 +15,7 @@ app.get('/home', function(request, response) {
 });
 
 io.on('connection', function(socket) {
-	console.log('A connection has been made.');
+	socket.on('chat.message', function(message) {
+		console.log('New Message: ' + message);
+	});
 });

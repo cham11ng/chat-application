@@ -9,10 +9,30 @@
 	</style>
 </head>
 <body>
-	<h1>Hello World</h1>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-	<script type="text/javascript">
-		var socket = io();
-	</script>
+<div id="chat">
+	<form @submit.prevent="send">
+		<input type="text" name="chat" v-model="message">
+		<button type="submit">Send</button>
+	</form>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>
+<script type="text/javascript">
+	var socket = io();
+
+	new Vue({
+		el: '#chat',
+
+		data: {
+			message: ''
+		},
+
+		methods: {
+			send: function(e) {
+				socket.emit('chat.message', this.message);
+			}
+		}
+	});
+</script>
 </body>
 </html>

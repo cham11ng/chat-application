@@ -15,7 +15,11 @@ app.get('/home', function(request, response) {
 });
 
 io.on('connection', function(socket) {
-	socket.on('chat.message', function(message) {
-		console.log('New Message: ' + message);
+	socket.on('chat.message', function(messages) {
+		io.emit('chat.message', messages);
+	});
+
+	socket.on('disconnect', function() {
+		io.emit('chat.message', {text: 'User disconnected.'});
 	});
 });

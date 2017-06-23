@@ -3,20 +3,37 @@
 <head>
 	<title>Welcome | Node.js</title>
 	<style type="text/css">
-		h1 {
-			text-align: center;
-		}
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+        form input { border: 0; padding: 10px; width: 90%; margin-right: .20%; }
+        form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+        #messages { list-style-type: none; margin: 0 0 45px; padding: 0; }
+        #messages li { padding: 5px 10px; }
+        #messages li:nth-child(odd) { background: #eee; }
+        .username { z-index: 4; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .username input { text-align: center; max-width: 40%; border: 0; padding: 10px; background: #234; color: #fff; height: 70px; box-shadow: 2px 2px 200px 200px #999; font-size: 26pt; }
 	</style>
 </head>
 <body>
 <div id="chat">
+	<div class="username" v-if="usernameField">
+		<input type="text" v-model="username" placeholder="Username" @keyup.enter="setUsername" />
+	</div>
+	<ul id="messages">
+		<li v-for="message in messages">
+			<strong v-if="message.username">{{ message.username }}</strong>
+			<strong v-else>Anonymous</strong>
+			: {{ message.text }}
+		</li>
+	</ul>
 	<form @submit.prevent="send">
-		<input type="text" name="chat" v-model="message">
+		<input type="text" name="chat" v-model="text" />
 		<button type="submit">Send</button>
 	</form>
 </div>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.js"></script>
 <script type="text/javascript">
 	var socket = io();
 
@@ -24,12 +41,30 @@
 		el: '#chat',
 
 		data: {
-			message: ''
+			username: '',
+			text: '',
+			messages: [],
+			usernameField: true
+		},
+
+		mounted: function() {
+			const vm = this;
+
+			socket.on('chat.message', function(messages) {
+				vm.messages.push(messages);
+			});
 		},
 
 		methods: {
 			send: function(e) {
-				socket.emit('chat.message', this.message);
+				messages = { username: this.username, text: this.text };
+				socket.emit('chat.message', messages);
+
+				this.text = '';
+			},
+
+			setUsername: function() {
+				this.usernameField = false;
 			}
 		}
 	});
